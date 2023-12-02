@@ -1,6 +1,7 @@
 <?php
 if (isset($_REQUEST['cetak'])) {
     $antrian = $_REQUEST['antrian'];
+    $jenis = ($_REQUEST['jenis'] == 0) ? 'NON RACIKAN' : 'RACIKAN';
 }
 ?>
 <html>
@@ -35,7 +36,7 @@ p {
     text-align: center;
     background-color: #fff;
     font-size: 48px;
-    font-family: "Lucida Console", "Courier New", monospace;
+    font-family: "Lucida Console";
     font-weight: bold;
 }
 
@@ -43,13 +44,28 @@ p {
     text-align: center;
     background-color: #fff;
     font-size: 24px;
-    font-family: "Lucida Console", "Courier New", monospace;
+    font-family: "Lucida Console";
     font-weight: bold;
+}
+
+.antrian_head1 {
+    text-align: center;
+    background-color: #fff;
+    font-size: 12px;
+    font-family: "roboto";
+    font-weight: bold;
+}
+
+.antrian_foot {
+    text-align: center;
+    background-color: #fff;
+    font-size: 8px;
+    font-family: "roboto";
 }
 
 @page {
     size: 58mm 50mm landscape;
-    
+
 }
 
 body.receipt .sheet {
@@ -62,13 +78,29 @@ body.receipt .sheet {
         width: 58mm
     }
 }
+
+@media print {
+    .page-break {
+        display: block;
+        page-break-before: always;
+    }
+}
 </style>
 
 <body>
     <div class="sheet">
-        <p class="antrian_head"> FARMASI </p>
+        <p class="antrian_head1"> Antrian Farmasi </p>
+        <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
+        <p class="antrian_foot"> Semoga Lekas Sembuh </p>
     </div>
+    <div class="page-break"></div>
+    <div class="sheet">
+        <p class="antrian_head1"> Antrian Farmasi </p>
+        <p class="antrian_head1"> <?php echo $jenis ?> </p>
+        <p class="antrian"> <?php echo $antrian ?> </p>
+        <p class="antrian_foot"> Semoga Lekas Sembuh </p>
+    </div> 
 </body>
 
 </html>

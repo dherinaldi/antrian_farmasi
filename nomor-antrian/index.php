@@ -63,19 +63,23 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center d-grid p-5">
                             <div class="border border-success rounded-2 py-2 mb-5">
-                                <h3 class="pt-4">ANTRIAN</h3>
+                                <h3 class="pt-4">ANTRIAN</h3>                               
                                 <!-- menampilkan informasi jumlah antrian -->
                                 <h1 id="antrian" class="display-1 fw-bold text-success text-center lh-1 pb-2 antrian">
                                 </h1>
                             </div>
                             <!-- button pengambilan nomor antrian -->
-                            <a id="insert" href="javascript:void(0)"
-                                class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2">
-                                <i class="bi-person-plus fs-4 me-2"></i> Ambil Nomor
+                            <a href="javascript:void(0)" data-jenis="0"
+                                class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2 insert">
+                                <i class="bi-book fs-4 me-2"></i> NON RACIKAN
                             </a>
-                            <a id="cetak_nomor" class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2">
+                            <a href="javascript:void(0)" data-jenis="1"
+                                class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2 insert">
+                                <i class="bi-book fs-4 me-2"></i> RACIKAN
+                            </a>
+                            <!-- <a id="cetak_nomor" class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2">
                                 <i class="bi-person-plus fs-4 me-2"></i> Cetak
-                            </a>
+                            </a> -->
 
                         </div>
                     </div>
@@ -111,10 +115,12 @@
         $('#antrian').load('get_antrian.php');
 
         // proses insert data
-        $('#insert').on('click', function() {
+        $('a.insert').on('click', function() {
+            var jenis = $(this).data('jenis');
             $.ajax({
                 type: 'POST', // mengirim data dengan method POST
                 url: 'insert.php', // url file proses insert data
+                data: { jenis:jenis },
                 success: function(result) { // ketika proses insert data selesai
                     // jika berhasil
                     if (result === 'Sukses') {
@@ -123,7 +129,8 @@
                     }
                 },
             });
-            cetak();
+            // cetak tiket berdasarkan jenis resepnya
+            cetak(jenis);
         });
 
         $('#cetak_nomor').on('click', function() {
@@ -150,20 +157,18 @@
         });
     });
 
-    function cetak() {    
+    function cetak(jenis) {    
         var antrian = $('#antrian').text();
         $.ajax({
             type: 'POST', // mengirim data dengan method POST
             url: 'cetak.php', // url file proses insert data
             data: {
                 antrian: parseInt(antrian)+1,
-                cetak: 'cetak'
+                cetak: 'cetak',
+                jenis: jenis
             },
             success: function(result) { // ketika proses insert data selesai
-                // jika berhasil
-                //console.log(result);
-                //window.print();
-                //var printWindow = window.open('', '_blank');                
+                // jika berhasil                           
                 var printWindow = window.open('', '_blank');
                 printWindow.document.open();
                 printWindow.document.write(result);
