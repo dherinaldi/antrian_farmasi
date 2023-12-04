@@ -1,7 +1,5 @@
 # antrian_farmasi
 Antrian Farmasi RS Internal
-=========
-=======
 
 # Aplikasi Antrian Berbasis Web
 Aplikasi Antrian merupakan sistem manajemen yang digunakan untuk mengelola antrian pengunjung pada suatu perusahaan atau instansi. Aplikasi antrian dapat digunakan sebagai sarana untuk mencapai kinerja efektif dan efisien bagi perusahaan atau instansi dalam melayani pengunjung.
@@ -18,9 +16,7 @@ Halaman Nomor Antrian digunakan pengunjung untuk mengambil nomor antrian. Fitur 
 - Panggilan Antrian
 
 Halaman Panggilan Antrian digunakan petugas loket untuk memanggil antrian pengunjung. Halaman ini menampilkan informasi jumlah antrian, nomor antrian yang sedang dipanggil, nomor antrian selanjutnya yang akan dipanggil, sisa antrian yang belum dipanggil. Petugas loket dapat menekan tombol panggilan antrian pada layar untuk memanggil antrian dengan menggunakan suara yang bisa dihubungkan dengan alat pengeras suara. Untuk suara panggilan antrian pada aplikasi ini menggunakan library ResponsiveVoice.JS.
-=======
+
 # antrian_farmasi
 Antrian Farmasi RS Internal
 
-=======
-=======
