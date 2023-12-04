@@ -1,7 +1,8 @@
-<<<<<<<<< Temporary merge branch 1
 # antrian_farmasi
 Antrian Farmasi RS Internal
 =========
+=======
+
 # Aplikasi Antrian Berbasis Web
 Aplikasi Antrian merupakan sistem manajemen yang digunakan untuk mengelola antrian pengunjung pada suatu perusahaan atau instansi. Aplikasi antrian dapat digunakan sebagai sarana untuk mencapai kinerja efektif dan efisien bagi perusahaan atau instansi dalam melayani pengunjung.
 
@@ -21,4 +22,5 @@ Halaman Panggilan Antrian digunakan petugas loket untuk memanggil antrian pengun
 # antrian_farmasi
 Antrian Farmasi RS Internal
 
->>>>>>>>> Temporary merge branch 2
+=======
+=======
