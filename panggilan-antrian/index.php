@@ -182,7 +182,7 @@
     <!-- Responsivevoice -->
     <!-- Get API Key -> https://responsivevoice.org/ -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
-    <script src="../assets/js/clock.js"></script>
+    <!-- <script src="../assets/js/clock.js"></script> -->
 
     <script type="text/javascript">
     $(document).ready(function() {
