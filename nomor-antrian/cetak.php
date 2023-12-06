@@ -35,7 +35,7 @@ p {
 .antrian {
     text-align: center;
     background-color: #fff;
-    font-size: 48px;
+    font-size: 7em;
     font-family: "Lucida Console";
     font-weight: bold;
 }
@@ -75,7 +75,7 @@ body.receipt .sheet {
 
 @media print {
     body.receipt {
-        width: 58mm
+        width: 78mm
     }
 }
 
@@ -84,6 +84,15 @@ body.receipt .sheet {
         display: block;
         page-break-before: always;
     }
+}
+
+@media print {
+    body {
+        margin: 0;
+        color: #000;
+        background-color: #fff;
+    }
+
 }
 </style>
 
@@ -100,7 +109,7 @@ body.receipt .sheet {
         <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
         <p class="antrian_foot"> Semoga Lekas Sembuh </p>
-    </div> 
+    </div>
 </body>
 
 </html>
