@@ -304,14 +304,14 @@
 
         });
 
-        // auto reload data antrian setiap 1 detik untuk menampilkan data secara realtime
+        // auto reload data antrian setiap 20 detik untuk menampilkan data secara realtime
           setInterval(function() {
           $('#jumlah-antrian').load('get_jumlah_antrian.php').fadeIn("slow");
           $('#antrian-sekarang').load('get_antrian_sekarang.php').fadeIn("slow");
           $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
           $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
           table.ajax.reload(null, false);
-        }, 1000);  
+        }, 20000);  
     });
     </script>
 </body>
