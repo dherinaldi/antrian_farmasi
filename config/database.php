@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 // deklarasi parameter koneksi database
 $host     = "localhost";              // server database, default “localhost” atau “127.0.0.1”
 $username = "root";                   // username database, default “root”

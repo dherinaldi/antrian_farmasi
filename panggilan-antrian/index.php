@@ -204,9 +204,9 @@
                     "className": 'text-center'
                 },
                 {
-                    "data": "status",
+                    "data": "tanggal",
                     "visible": false
-                },
+                },              
                 {
                     "data": "racikan",
                     "width": '250px',
@@ -290,6 +290,7 @@
                 data: {
                     antrian: data["no_antrian"],
                     jenis: data["jenis"],
+                    tanggal: data['tanggal'],
                     cetak: 'cetak'
                 },
                 success: function(result) { // ketika proses insert data selesai
@@ -311,7 +312,7 @@
           $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
           $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
           table.ajax.reload(null, false);
-        }, 20000);  
+        }, 10000);  
     });
     </script>
 </body>

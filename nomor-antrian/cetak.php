@@ -1,7 +1,9 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 if (isset($_REQUEST['cetak'])) {
     $antrian = $_REQUEST['antrian'];
-    $jenis = ($_REQUEST['jenis'] == 0) ? 'NON RACIKAN' : 'RACIKAN';
+    $jenis = ($_REQUEST['jenis'] == 0) ? 'NON RACIKAN' : 'RACIKAN';   
+    $tanggal = ($_REQUEST['tanggal'] != null)?$_REQUEST['tanggal']:date('Y-m-d');
 }
 ?>
 <html>
@@ -101,14 +103,14 @@ body.receipt .sheet {
         <p class="antrian_head1"> Antrian Farmasi </p>
         <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
-        <p class="antrian_foot"> Semoga Lekas Sembuh </p>
+        <p class="antrian_foot"> <?php echo $tanggal ;?> <br> Semoga Lekas Sembuh </p>
     </div>
     <div class="page-break"></div>
     <div class="sheet">
         <p class="antrian_head1"> Antrian Farmasi </p>
         <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
-        <p class="antrian_foot"> Semoga Lekas Sembuh </p>
+        <p class="antrian_foot"> <?php echo $tanggal;?> <br> Semoga Lekas Sembuh </p>
     </div>
 </body>
 

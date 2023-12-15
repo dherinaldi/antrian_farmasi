@@ -47,6 +47,8 @@
     </style>
 </head>
 
+<?php date_default_timezone_set('Asia/Jakarta');?>
+
 <body class="d-flex flex-column h-100">
     <main class="flex-shrink-0 ">
         <div class="container pt-5 noPrint">
@@ -165,7 +167,8 @@
             data: {
                 antrian: parseInt(antrian)+1,
                 cetak: 'cetak',
-                jenis: jenis
+                jenis: jenis,
+                tanggal : '<?php echo date('Y-m-d')?>'
             },
             success: function(result) { // ketika proses insert data selesai
                 // jika berhasil                           
