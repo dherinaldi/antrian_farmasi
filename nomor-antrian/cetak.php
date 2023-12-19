@@ -40,6 +40,7 @@ p {
     font-size: 7em;
     font-family: "Lucida Console";
     font-weight: bold;
+    margin: 0pt;
 }
 
 .antrian_head {
@@ -63,6 +64,14 @@ p {
     background-color: #fff;
     font-size: 8px;
     font-family: "roboto";
+}
+
+.antrian_tanggal {
+    text-align: center;
+    background-color: #fff;
+    font-size: 14px;
+    font-family: "roboto";
+    font-weight: bold;
 }
 
 @page {
@@ -103,14 +112,16 @@ body.receipt .sheet {
         <p class="antrian_head1"> Antrian Farmasi </p>
         <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
-        <p class="antrian_foot"> <?php echo $tanggal ;?> <br> Semoga Lekas Sembuh </p>
+        <p class="antrian_tanggal"> <?php echo $tanggal ;?></p>
+        <p class="antrian_foot">Semoga Lekas Sembuh </p>
     </div>
     <div class="page-break"></div>
     <div class="sheet">
         <p class="antrian_head1"> Antrian Farmasi </p>
         <p class="antrian_head1"> <?php echo $jenis ?> </p>
         <p class="antrian"> <?php echo $antrian ?> </p>
-        <p class="antrian_foot"> <?php echo $tanggal;?> <br> Semoga Lekas Sembuh </p>
+        <p class="antrian_tanggal"> <?php echo $tanggal ;?></p>
+        <p class="antrian_foot">Semoga Lekas Sembuh </p>
     </div>
 </body>
 
