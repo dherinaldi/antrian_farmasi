@@ -47,7 +47,9 @@
     </style>
 </head>
 
-<?php date_default_timezone_set('Asia/Jakarta');?>
+<?php date_default_timezone_set('Asia/Jakarta');
+require_once "../config/database_prod.php";
+?>
 
 <body class="d-flex flex-column h-100">
     <main class="flex-shrink-0 ">
@@ -62,14 +64,30 @@
                         </div>
                     </div>
 
+
+                    </select>
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center d-grid p-5">
                             <div class="border border-success rounded-2 py-2 mb-5">
-                                <h3 class="pt-4">ANTRIAN</h3>                               
+                                <h3 class="pt-4">ANTRIAN</h3>
                                 <!-- menampilkan informasi jumlah antrian -->
                                 <h1 id="antrian" class="display-1 fw-bold text-success text-center lh-1 pb-2 antrian">
                                 </h1>
                             </div>
+                            <div class="border border-success rounded-2 py-2 mb-5">
+                                <label for="norm" class="form-label">NORM</label>
+                                <select id="sel_norm" class="form-select " aria-label="Default select example">
+                                    <option value='0'>Ketikkan No RM</option>
+                                </select>
+
+                                <input type="text" id="id">
+                                <p id="nama_pasien" class="h4 fw-bold text-success form-label">-
+                                </p>
+
+                                <p id="poli" class="h4 fw-bold text-success form-label">-
+                                </p>
+                            </div>
+
                             <!-- button pengambilan nomor antrian -->
                             <a href="javascript:void(0)" data-jenis="0"
                                 class="btn btn-success btn-block rounded-pill fs-5 px-5 py-4 mb-2 insert">
@@ -111,24 +129,36 @@
         integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous">
     </script>
 
+    <!-- Styles -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+
     <script type="text/javascript">
     $(document).ready(function() {
-        
-        // tampilkan jumlah antrian
+        //$('.sel_norm').select2(); 
         $('#antrian').load('get_antrian.php');
 
-        // proses insert data
         $('a.insert').on('click', function() {
             var jenis = $(this).data('jenis');
+            var id = $("#id").val();
             $.ajax({
                 type: 'POST', // mengirim data dengan method POST
                 url: 'insert.php', // url file proses insert data
-                data: { jenis:jenis },
+                data: {
+                    jenis: jenis,
+                    id: id
+                },
                 success: function(result) { // ketika proses insert data selesai
+                    console.log(result);
                     // jika berhasil
-                    if (result === 'Sukses') {
-                        // tampilkan jumlah antrian
-                        $('#antrian').load('get_antrian.php').fadeIn('slow');
+                    if (result === 'Sukses') {                        
+                      $('#antrian').load('get_antrian.php').fadeIn('slow');
                     }
                 },
             });
@@ -136,40 +166,54 @@
             cetak(jenis);
         });
 
-        $('#cetak_nomor').on('click', function() {
-            var antrian = $('#antrian').text();
-            $.ajax({
-                type: 'POST', // mengirim data dengan method POST
-                url: 'cetak.php', // url file proses insert data
-                data: {
-                    antrian: antrian,
-                    cetak: 'cetak'
+
+        $("#sel_norm").select2({
+            ajax: {
+                url: "data.php",
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        search: params.term // search term
+                    };
                 },
-                success: function(result) { // ketika proses insert data selesai
-                    // jika berhasil
-                    //console.log(result);
-                    //window.print();
-                    //var printWindow = window.open('', '_blank');
-                    var printWindow = window.open('', '_blank');
-                    printWindow.document.open();
-                    printWindow.document.write(result);
-                    printWindow.document.close();
-                    printWindow.print();
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
                 },
-            });
+                cache: true
+            }
         });
+
+        $('#sel_norm').on('change', function() {
+            //var input_value = $(this).find(':selected').data('value');;
+            let value = $(this).val();
+            let text = $("option:selected").text();
+            const arr = text.split("|");
+            let nm_pasien = `${arr[0]} ${arr[1]}`;
+            let poli = `${arr[2]}`;
+
+            $("#id").val(value);
+            $("#nama_pasien").text(nm_pasien);
+            $("#poli").text(poli);
+            //$('#harga_beli').val(input_value);
+        });
+
+
     });
 
-    function cetak(jenis) {    
+    function cetak(jenis) {
         var antrian = $('#antrian').text();
         $.ajax({
             type: 'POST', // mengirim data dengan method POST
             url: 'cetak.php', // url file proses insert data
             data: {
-                antrian: parseInt(antrian)+1,
+                antrian: parseInt(antrian) + 1,
                 cetak: 'cetak',
                 jenis: jenis,
-                tanggal : '<?php echo date('Y-m-d')?>'
+                tanggal: '<?php echo date('Y-m-d')?>'
             },
             success: function(result) { // ketika proses insert data selesai
                 // jika berhasil                           

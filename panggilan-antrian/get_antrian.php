@@ -3,14 +3,17 @@
 // jika ada ajax request
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
   // panggil file "database.php" untuk koneksi ke database
-  require_once "../config/database.php";
+  require_once "../config/database.php";  
 
   // ambil tanggal sekarang
   $tanggal = gmdate("Y-m-d", time() + 60 * 60 * 7);
 
   // sql statement untuk menampilkan data dari tabel "tbl_antrian" berdasarkan "tanggal"
-  $query = mysqli_query($mysqli, "SELECT id, no_antrian, status, jenis,tanggal FROM tbl_antrian 
-                                  WHERE tanggal='$tanggal'")
+  $s_query ="SELECT ta.id, ta.no_antrian, ta.status, ta.jenis,ta.tanggal,ta.nomor,ta.nopen,ta.ruangan,ta.norm ,p.NAMA
+  FROM tbl_antrian ta left join regonline.pasien p on ta.norm = p.NORM
+  WHERE tanggal='$tanggal'";
+
+  $query = mysqli_query($mysqli, $s_query)
                                   or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
   // ambil jumlah baris data hasil query
   $rows = mysqli_num_rows($query);
@@ -28,6 +31,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
       $data['status']     = $row["status"];
       $data['jenis']     = $row["jenis"];
       $data['tanggal']     = $row["tanggal"];
+      $data['norm']     = $row["norm"]." ".$row['NAMA'];
+      $data['ruangan']     = $row["ruangan"];
+
       $racikan = ($row["jenis"]==0?'NON RACIKAN':'RACIKAN');
       $data['racikan'] = $racikan;
 
@@ -49,6 +55,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     $data['jenis']     = "";
     $data['racikan']     = "";
     $data['tanggal']     = "-";
+    $data['norm']     = "-";
+    $data['ruangan']     = "-";
 
     array_push($response["data"], $data);
 

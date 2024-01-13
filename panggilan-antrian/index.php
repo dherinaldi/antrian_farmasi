@@ -139,7 +139,8 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Antrian</th>
-                                    <th>Status</th>
+                                    <th>Norm</th>
+                                    <th>Poli</th>
                                     <th>Jenis</th>
                                     <th>Panggil</th>
                                 </tr>
@@ -202,11 +203,15 @@
                     "data": "no_antrian",
                     "width": '250px',
                     "className": 'text-center'
-                },
-                {
-                    "data": "tanggal",
-                    "visible": false
                 },              
+                {
+                    "data": "norm",                    
+                    "className": 'text-center'
+                },   
+                {
+                    "data": "ruangan",                    
+                    "className": 'text-center'
+                },            
                 {
                     "data": "racikan",
                     "width": '250px',
