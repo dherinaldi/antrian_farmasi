@@ -8,40 +8,34 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
 require_once "../config/database_prod.php";
 $tanggal = gmdate("Y-m-d", time() + 60 * 60 * 7);
 
-//$search = $_REQUEST['search'];
+$search = $_REQUEST['search'];
 //echo $search;
 
-if(!isset($_REQUEST['search'])){ 
-  $fetchData = mysqli_query($mysqli,"SELECT SQL_NO_CACHE kun.NOMOR, kun.NOPEN, kun.RUANGAN , `master`.getNamaRuang(kun.RUANGAN) POLI, kun.MASUK, kun.KELUAR ,pen.NORM, 
-  `master`.getNamaLengkap(pen.NORM) NAMA, o.PEMBERI_RESEP, o.TUJUAN, `master`.getNamaRuang(o.TUJUAN) NAMA_TUJUAN
-  FROM pendaftaran.kunjungan kun
-  LEFT join pendaftaran.pendaftaran pen ON pen.NOMOR = kun.NOPEN
-  LEFT JOIN layanan.order_resep o ON kun.NOMOR = o.KUNJUNGAN
-  LEFT JOIN `master`.pasien mp ON mp.NORM = pen.NORM
-  WHERE 0=0
-  AND kun.RUANGAN LIKE '10201%'  
-  AND DATE_FORMAT(kun.MASUK,'%Y-%m-%d') BETWEEN '2023-06-05' AND '2023-06-05'
-  GROUP BY o.KUNJUNGAN
-  ORDER BY o.KUNJUNGAN DESC limit 10");
-}else{ 
-  $search = $_REQUEST['search'];   
-  $fetchData = mysqli_query($mysqli,"SELECT SQL_NO_CACHE kun.NOMOR, kun.NOPEN, kun.RUANGAN , `master`.getNamaRuang(kun.RUANGAN) POLI, kun.MASUK, kun.KELUAR ,pen.NORM, 
-  `master`.getNamaLengkap(pen.NORM) NAMA, o.PEMBERI_RESEP, o.TUJUAN, `master`.getNamaRuang(o.TUJUAN) NAMA_TUJUAN 
-  FROM pendaftaran.kunjungan kun
-  LEFT join pendaftaran.pendaftaran pen ON pen.NOMOR = kun.NOPEN
-  LEFT JOIN layanan.order_resep o ON kun.NOMOR = o.KUNJUNGAN
-  LEFT JOIN `master`.pasien mp ON mp.NORM = pen.NORM
-  WHERE 0=0
-  AND kun.RUANGAN LIKE '10201%'
-  AND pen.NORM LIKE '%".$search."%' 
-  AND DATE_FORMAT(kun.MASUK,'%Y-%m-%d') BETWEEN '2023-06-05' AND '2023-06-05'
-  GROUP BY o.KUNJUNGAN
-  ORDER BY o.KUNJUNGAN DESC limit 10");
-} 
+//$start = ( $start != '' )?date( 'Y-m-d', strtotime( $start ) ):date( 'Y-m-d' );
 
+$s_where=$s_tanggal='';
 
-//$query = mysqli_query($mysqli, $fetchData)
-//or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
+$s_tanggal = " AND DATE_FORMAT(kun.MASUK,'%Y-%m-%d') BETWEEN '".$tanggal."' AND '".$tanggal."' ";
+
+$search = ( $search != '' )?" AND pen.NORM LIKE '%".$search."%' ":"";
+
+//echo $search;
+
+$s_query = "SELECT SQL_NO_CACHE kun.NOMOR, kun.NOPEN, kun.RUANGAN , `master`.getNamaRuang(kun.RUANGAN) POLI, kun.MASUK, kun.KELUAR ,pen.NORM, 
+`master`.getNamaLengkap(pen.NORM) NAMA, o.PEMBERI_RESEP, o.TUJUAN, `master`.getNamaRuang(o.TUJUAN) NAMA_TUJUAN
+FROM pendaftaran.kunjungan kun
+LEFT join pendaftaran.pendaftaran pen ON pen.NOMOR = kun.NOPEN
+LEFT JOIN layanan.order_resep o ON kun.NOMOR = o.KUNJUNGAN
+LEFT JOIN `master`.pasien mp ON mp.NORM = pen.NORM
+WHERE 0=0
+AND kun.RUANGAN LIKE '10201%'  
+$search
+".$s_tanggal."
+GROUP BY o.KUNJUNGAN
+ORDER BY o.KUNJUNGAN DESC limit 10";
+
+$fetchData = mysqli_query($mysqli, $s_query)
+or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
 // ambil data hasil query
 
 $hasil = array();

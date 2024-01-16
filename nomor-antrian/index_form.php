@@ -77,7 +77,6 @@ require_once "../config/database_prod.php";
                             <div class="border border-success rounded-2 py-2 mb-5">
                                 <label for="norm" class="form-label">NORM</label>
                                 <select id="sel_norm" class="form-select " aria-label="Default select example">
-                                    <option value='0'>Ketikkan No RM</option>
                                 </select>
 
                                 <input type="text" id="id">
@@ -157,8 +156,8 @@ require_once "../config/database_prod.php";
                 success: function(result) { // ketika proses insert data selesai
                     console.log(result);
                     // jika berhasil
-                    if (result === 'Sukses') {                        
-                      $('#antrian').load('get_antrian.php').fadeIn('slow');
+                    if (result === 'Sukses') {
+                        $('#antrian').load('get_antrian.php').fadeIn('slow');
                     }
                 },
             });
@@ -168,6 +167,8 @@ require_once "../config/database_prod.php";
 
 
         $("#sel_norm").select2({
+            placeholder: 'Ketikkan No RM Anda',
+            minimumInputLength: 2,
             ajax: {
                 url: "data.php",
                 type: "post",
