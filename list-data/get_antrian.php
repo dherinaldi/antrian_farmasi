@@ -28,22 +28,30 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     or die('Ada kesalahan pada query tampil data: ' . mysqli_error($mysqli));
 
     $rows = mysqli_num_rows($query);
+    $total = 0;
 
-    if ($rows != 0) {
+   if($rows != 0) {
         $response = array();
-        $response["data"] = array();
-
-        // ambil data hasil query
+        $response["data"] = array();        
+    
         while ($row = mysqli_fetch_assoc($query)) {
+            $total += $row['antrian'];
             $data['tanggal'] = $row["tanggal"];
             $data['antrian'] = $row["antrian"];            
-
             array_push($response["data"], $data);
         }
-
-        // tampilkan data
-       // echo json_encode($response);
+    
+        // ✅ Tambahkan total ke array yang sudah ada
+        $response['total'] = $total;
+    } else {
+        // Jika tidak ada data
+        $response = [
+            'data' => [],
+            'total' => 0
+        ];
     }
+
+    
     echo json_encode($response);
 
 }

@@ -91,7 +91,11 @@
 
                         </table>
                     </div>
+                    <div class="mt-3" id="total-kunjungan"><strong>Total Kunjungan:</strong> 0</div>
+
                 </div>
+
+
             </div>
         </div>
     </main>
@@ -137,6 +141,14 @@
                 "data": function(d) {
                     d.tanggal_awal = $('#tanggal_awal').val();
                     d.tanggal_akhir = $('#tanggal_akhir').val();
+                },
+                "dataSrc": function(json) {
+                    console.log(json);
+                    // Update total kunjungan
+                    let formattedTotal = new Intl.NumberFormat().format(json.total ?? 0);
+                    $('#total-kunjungan').html('<strong>Total Kunjungan:</strong> ' +
+                        formattedTotal);
+                    return json.data;
                 }
             },
             // menampilkan data
