@@ -206,7 +206,7 @@
                 },              
                 {
                     "data": "norm",                    
-                    "className": 'text-center'
+                    "className": 'text-left'
                 },   
                 {
                     "data": "ruangan",                    

@@ -80,10 +80,16 @@ require_once "../config/database_prod.php";
                                 </select>
 
                                 <input type="text" id="id">
+                                <p id="norm_pasien" class="h4 fw-bold text-success form-label">-
+                                </p>
+
                                 <p id="nama_pasien" class="h4 fw-bold text-success form-label">-
                                 </p>
 
                                 <p id="poli" class="h4 fw-bold text-success form-label">-
+                                </p>
+
+                                <p id="nama_dokter" class="h4 fw-bold text-success form-label">-
                                 </p>
                             </div>
 
@@ -151,7 +157,10 @@ require_once "../config/database_prod.php";
                 url: 'insert.php', // url file proses insert data
                 data: {
                     jenis: jenis,
-                    id: id
+                    id: id,
+                    poli: $("#poli").text(),
+                    nama_pasien: $("#nama_pasien").text()
+
                 },
                 success: function(result) { // ketika proses insert data selesai
                     console.log(result);
@@ -162,7 +171,7 @@ require_once "../config/database_prod.php";
                 },
             });
             // cetak tiket berdasarkan jenis resepnya
-            cetak(jenis);
+            //cetak(jenis);
         });
 
 
@@ -191,17 +200,24 @@ require_once "../config/database_prod.php";
         $('#sel_norm').on('change', function() {
             //var input_value = $(this).find(':selected').data('value');;
             let value = $(this).val();
+            const val_arr = value.split("|");
+
             let text = $("option:selected").text();
             const arr = text.split("|");
-            let nm_pasien = `${arr[0]} ${arr[1]}`;
+            
+            let norm_pasien = `${arr[0]}`;
+            let nm_pasien = `${arr[1]}`;
             let poli = `${arr[2]}`;
+            let nama_dokter = `${val_arr[6]}`;
+
+            alert(value);
 
             $("#id").val(value);
+            $("#norm_pasien").text(norm_pasien);
             $("#nama_pasien").text(nm_pasien);
-            $("#poli").text(poli);
-            //$('#harga_beli').val(input_value);
+            $("#nama_dokter").text(nama_dokter);
+            $("#poli").text(poli);          
         });
-
 
     });
 

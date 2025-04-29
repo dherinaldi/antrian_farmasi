@@ -95,6 +95,23 @@
             </div>
           </div>
         </div>
+
+        <div class="col-lg-6 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-5">
+              <div class="feature-icon-1 bg-success bg-gradient mb-4">
+                <i class="bi-list"></i>
+              </div>
+              <h3>Data Kunjungan Farmasi</h3>
+              <p class="mb-4">Halaman untuk menampilkan rekap data farmasi </p>
+              <a href="list-data" class="btn btn-success rounded-pill px-4 py-2" target="_blank">
+                Tampilkan <i class="bi-chevron-right ms-2"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </main>

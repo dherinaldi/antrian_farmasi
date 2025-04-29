@@ -10,6 +10,15 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     $updated_date = gmdate("Y-m-d H:i:s", time() + 60 * 60 * 7);
 
     $jenis = ($_POST['jenis']);
+    $nama_pasien = ($_POST['nama_pasien']);
+    $nama_pasien = ( $nama_pasien != '' )?$nama_pasien:"-";
+
+    echo $nama_pasien;
+
+    //$start = ( $start != '' )?date( 'Y-m-d', strtotime( $start ) ):date( 'Y-m-d' );
+
+    $id = $_POST['id'];
+    echo $id;
 
     if (isset($_POST['id'])) {
         $id = explode("|", $_POST['id']);
@@ -23,7 +32,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
         $nopen = "-";
         $ruangan = "-";
         $norm = 0;
-
     }
 
     // membuat "no_antrian"
@@ -48,8 +56,12 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     }
 
     // sql statement untuk insert data ke tabel "tbl_antrian"
-    $insert = mysqli_query($mysqli, "INSERT INTO tbl_antrian(tanggal, no_antrian,jenis,nomor,nopen,ruangan,norm,updated_date)
-                                   VALUES('$tanggal', '$no_antrian','$jenis','$nomor','$nopen','$ruangan','$norm','$updated_date')")
+    $s_insert = "INSERT INTO tbl_antrian(tanggal, no_antrian,jenis,nomor,nopen,ruangan,norm,updated_date)
+    VALUES('$tanggal', '$no_antrian','$jenis','$nomor','$nopen','$ruangan',$norm,'$updated_date')";
+
+    echo $s_insert;
+    
+    $insert = mysqli_query($mysqli, $s_insert)
     or die('Ada kesalahan pada query insert : ' . mysqli_error($mysqli));
 
     $cek_rm = mysqli_query($mysqli, "SELECT NORM FROM regonline.pasien WHERE NORM='$norm'")
@@ -58,9 +70,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     $rows_rm = mysqli_num_rows($cek_rm);
 
     if ($rows_rm != 0) {
-        $s_action = "UPDATE `regonline`.`pasien` SET `NAMA` = 'nama_updated' WHERE `NORM` = '$norm'";
+        $s_action = "UPDATE `regonline`.`pasien` SET `NAMA` = '".$nama_pasien."' WHERE `NORM` = '$norm'";
     } else {
-        $s_action = "INSERT INTO `regonline`.`pasien` (`NORM`, `NAMA`) VALUES ('$norm', '111')";
+        $s_action = "INSERT INTO `regonline`.`pasien` (`NORM`, `NAMA`) VALUES ('$norm', '".$nama_pasien."')";
 
     }
 

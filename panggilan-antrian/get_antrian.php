@@ -9,15 +9,15 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
   $tanggal = gmdate("Y-m-d", time() + 60 * 60 * 7);
 
   // sql statement untuk menampilkan data dari tabel "tbl_antrian" berdasarkan "tanggal"
-  $s_query ="SELECT ta.id, ta.no_antrian, ta.status, ta.jenis,ta.tanggal,ta.nomor,ta.nopen,ta.ruangan,ta.norm ,p.NAMA
+  $s_query ="SELECT ta.id, ta.no_antrian, ta.status, ta.jenis,ta.tanggal,ta.nomor,ta.nopen,ta.ruangan,ru.DESKRIPSI POLI,LPAD(ta.norm,6,'0') as norm ,p.NAMA
   FROM tbl_antrian ta left join regonline.pasien p on ta.norm = p.NORM
+  left join ruangan ru on ru.ID = ta.ruangan
   WHERE tanggal='$tanggal'";
 
   $query = mysqli_query($mysqli, $s_query)
                                   or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
   // ambil jumlah baris data hasil query
   $rows = mysqli_num_rows($query);
-
   // cek hasil query
   // jika data ada
   if ($rows <> 0) {
@@ -31,8 +31,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
       $data['status']     = $row["status"];
       $data['jenis']     = $row["jenis"];
       $data['tanggal']     = $row["tanggal"];
-      $data['norm']     = $row["norm"]." ".$row['NAMA'];
-      $data['ruangan']     = $row["ruangan"];
+      $data['norm']     = "(".$row["norm"].") ".$row['NAMA'];
+      $data['ruangan']     = $row['POLI'];
 
       $racikan = ($row["jenis"]==0?'NON RACIKAN':'RACIKAN');
       $data['racikan'] = $racikan;
