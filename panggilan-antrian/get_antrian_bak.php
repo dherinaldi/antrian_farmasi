@@ -1,7 +1,7 @@
 <?php
 // pengecekan ajax request untuk mencegah direct access file, agar file tidak bisa diakses secara langsung dari browser
 // jika ada ajax request
-
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
   // panggil file "database.php" untuk koneksi ke database
   require_once "../config/database.php";  
 
@@ -11,8 +11,8 @@
   // sql statement untuk menampilkan data dari tabel "tbl_antrian" berdasarkan "tanggal"
   $s_query ="SELECT ta.id, ta.no_antrian, ta.status, ta.jenis,ta.tanggal,ta.nomor,ta.nopen,ta.ruangan,ru.DESKRIPSI POLI,LPAD(ta.norm,6,'0') as norm ,p.NAMA
   FROM tbl_antrian ta left join regonline.pasien p on ta.norm = p.NORM
-  left join master.ruangan ru on ru.ID = ta.ruangan
-  WHERE ta.tanggal='$tanggal'";
+  left join ruangan ru on ru.ID = ta.ruangan
+  WHERE tanggal='$tanggal'";
 
   $query = mysqli_query($mysqli, $s_query)
                                   or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli));
@@ -63,3 +63,4 @@
     // tampilkan data
     echo json_encode($response);
   }
+}

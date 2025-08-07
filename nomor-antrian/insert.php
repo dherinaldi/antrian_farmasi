@@ -13,12 +13,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     $nama_pasien = ($_POST['nama_pasien']);
     $nama_pasien = ( $nama_pasien != '' )?$nama_pasien:"-";
 
-    echo $nama_pasien;
-
-    //$start = ( $start != '' )?date( 'Y-m-d', strtotime( $start ) ):date( 'Y-m-d' );
-
     $id = $_POST['id'];
-    echo $id;
+    #echo $id;
 
     if (isset($_POST['id'])) {
         $id = explode("|", $_POST['id']);
@@ -56,10 +52,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH
     }
 
     // sql statement untuk insert data ke tabel "tbl_antrian"
-    $s_insert = "INSERT INTO tbl_antrian(tanggal, no_antrian,jenis,nomor,nopen,ruangan,norm,updated_date)
+    $s_insert = "INSERT INTO regonline.tbl_antrian(tanggal, no_antrian,jenis,nomor,nopen,ruangan,norm,updated_date)
     VALUES('$tanggal', '$no_antrian','$jenis','$nomor','$nopen','$ruangan',$norm,'$updated_date')";
 
-    echo $s_insert;
+    //echo $s_insert;
     
     $insert = mysqli_query($mysqli, $s_insert)
     or die('Ada kesalahan pada query insert : ' . mysqli_error($mysqli));

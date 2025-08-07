@@ -171,7 +171,7 @@ require_once "../config/database_prod.php";
                 },
             });
             // cetak tiket berdasarkan jenis resepnya
-            //cetak(jenis);
+            cetak(jenis);
         });
 
 

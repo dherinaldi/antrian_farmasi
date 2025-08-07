@@ -1,9 +1,6 @@
 <?php
 // pengecekan ajax request untuk mencegah direct access file, agar file tidak bisa diakses secara langsung dari browser
 // jika ada ajax request
-if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
- 
-}
 
 require_once "../config/database_prod.php";
 $tanggal = gmdate("Y-m-d", time() + 60 * 60 * 7);
@@ -38,7 +35,7 @@ $search
 GROUP BY o.KUNJUNGAN
 ORDER BY o.KUNJUNGAN DESC limit 10";
 
-#echo $s_query;
+//echo $s_query;
 
 $fetchData = mysqli_query($mysqli_prod, $s_query)
 or die('Ada kesalahan pada query tampil data : ' . mysqli_error($mysqli_prod));
