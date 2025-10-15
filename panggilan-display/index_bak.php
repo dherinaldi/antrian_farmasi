@@ -88,10 +88,8 @@
                                         <p class="fw-bold text-success" style="font-size:160%;">ANTRIAN FARMASI </p>
                                         <h1 id="antrian-sekarang"
                                             class="display-1 fw-bold text-success text-center lh-1 pb-2"></h1>
-                                        <!-- <button id="test-voice" class="btn btn-primary">Aktifkan Suara</button> -->
-                                        <button id="aktifkan-suara" class="btn btn-sm btn-primary">Aktifkan Suara</button>
                                         <!-- <p id="antrian-sekarang" class="fs-3 text-success mb-1"></p> -->
-
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -137,105 +135,61 @@
     <script src="../assets/js/clock.js"></script>
 
     <script type="text/javascript">
-    let suaraDiaktifkan = false;
-    let nomorTerakhir = null;
-
-    $('#aktifkan-suara').on('click', function() {
-        suaraDiaktifkan = true;
-        alert("✅ Suara aktif — sistem siap memanggil antrian.");
-        $(this).hide(); // sembunyikan tombol
-        cekAntrian();
-        setInterval(cekAntrian, 10000); // cek tiap 10 detik
-    });
-
-    function cekAntrian() {
-        $('#antrian-sekarang').load('get_antrian_sekarang.php', function(response, status, xhr) {
-            if (!suaraDiaktifkan) return;
-            if (status === "success") {
-                const nomor = response.trim();
-                if (nomor && nomor !== nomorTerakhir) { // hanya bicara jika nomor baru
-                    nomorTerakhir = nomor;
-                    const u = new SpeechSynthesisUtterance("Nomor antrian " + nomor +
-                        ", silakan menuju loket penyerahan obat, farmasi");
-                    u.lang = "id-ID";
-                    u.rate = 0.9;
-                    speechSynthesis.speak(u);
-                    console.log("Memanggil antrian:", nomor);
-                }
-            }
-        });
-    }
-
-    $('#aktifkan-suara1').on('click', function() {
-        suaraDiaktifkan = true;
-        alert("✅ Suara aktif — sistem siap memanggil antrian.");
-    });
-
-
-    $('#antrian-sekarang1').load('get_antrian_sekarang.php', function(response, status, xhr) {
-        //if (!suaraDiaktifkan) return;
-
-        console.log(response.trim());
-
-        if (status === "success") {
-            const nomor = response.trim();
-            const u = new SpeechSynthesisUtterance("Nomor antrian " + nomor +
-                ", silakan menuju loket penyerahan obat, farmasi");
-            u.lang = "id-ID";
-            u.rate = 0.9;
-
-            speechSynthesis.speak(u);
-        }
-    });
-
-
     $(document).ready(function() {
-
-        window.onload = function() {
-            const u = new SpeechSynthesisUtterance("Selamat datang di display antrian farmasi");
-            u.lang = "id-ID";
-            u.rate = 0.9;
-            speechSynthesis.speak(u);
-        };
-
         // tampilkan informasi antrian
         $('#jumlah-antrian').load('get_jumlah_antrian.php');
-        //$('#antrian-sekarang').load('get_antrian_sekarang.php');
+        $('#antrian-sekarang').load('get_antrian_sekarang.php');
+        $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php');
+        $('#sisa-antrian').load('get_sisa_antrian.php');
 
-        $('#test-voice').on('click', function() {
-            $('#antrian-sekarang').load('get_antrian_sekarang.php', function(response) {
-                var bell = document.getElementById('tingtung');
-
-                // mainkan suara bell antrian
-                bell.pause();
-                bell.currentTime = 0;
-                bell.play();
-
-                // set delay antara suara bell dengan suara nomor antrian
-                durasi_bell = bell.duration * 770;
-
-                // mainkan suara nomor antrian
-                setTimeout(function() {
-                    const nomor = response.trim();
-                    const u = new SpeechSynthesisUtterance("Nomor antrian " + nomor +
-                        ", silakan menuju loket penyerahan obat, farmasi");
-                    u.lang = "id-ID";
-                    u.rate = 0.9;
-                    speechSynthesis.speak(u);
-
-                }, durasi_bell);
-
-            });
+        // menampilkan data antrian menggunakan DataTables
+        var table = $('#tabel-antrian').DataTable({
+            "lengthChange": false, // non-aktifkan fitur "lengthChange"
+            "searching": false, // non-aktifkan fitur "Search"
+            "ajax": "get_antrian.php", // url file proses tampil data dari database
+            // menampilkan data
+            "columns": [{
+                    "data": "no_antrian",
+                    "width": '250px',
+                    "className": 'text-center'
+                },
+                {
+                    "data": "status",
+                    "visible": false
+                },
+                {
+                    "data": null,
+                    "orderable": false,
+                    "searchable": false,
+                    "width": '100px',
+                    "className": 'text-center',
+                    "render": function(data, type, row) {
+                        // jika tidak ada data "status"
+                        if (data["status"] === "") {
+                            // sembunyikan button panggil
+                            var btn = "-";
+                        }
+                        // jika data "status = 0"
+                        else if (data["status"] === "0") {
+                            // tampilkan button panggil
+                            var btn =
+                                "<button class=\"btn btn-success btn-sm rounded-circle\"><i class=\"bi-mic-fill\"></i></button>";
+                        }
+                        // jika data "status = 1"
+                        else if (data["status"] === "1") {
+                            // tampilkan button ulangi panggilan
+                            var btn =
+                                "<button class=\"btn btn-secondary btn-sm rounded-circle\"><i class=\"bi-mic-fill\"></i></button>";
+                        };
+                        return btn;
+                    }
+                },
+            ],
+            "order": [
+                [0, "desc"] // urutkan data berdasarkan "no_antrian" secara descending
+            ],
+            "iDisplayLength": 10, // tampilkan 10 data per halaman
         });
-
-
-
-
-
-
-        //$('#antrian-selanjutnya').load('get_antrian_selanjutnya.php');
-        //$('#sisa-antrian').load('get_sisa_antrian.php');
-
 
         // panggilan antrian dan update data
         $('#tabel-antrian tbody').on('click', 'button', function() {
@@ -263,13 +217,12 @@
                         volume: 1
                     }); */
 
-                const u = new SpeechSynthesisUtterance("Nomor Antrian " + data[
-                    "no_antrian"]);
+                const u = new SpeechSynthesisUtterance("Nomor Antrian " + data["no_antrian"] );
                 u.lang = "id-ID";
                 u.rate = 0.9;
                 speechSynthesis.speak(u);
 
-
+                
             }, durasi_bell);
 
             // proses update data
@@ -288,6 +241,7 @@
             $('#antrian-sekarang').load('get_antrian_sekarang.php').fadeIn("slow");
             $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
             $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
+            table.ajax.reload(null, false);
         }, 1000);
     });
     </script>

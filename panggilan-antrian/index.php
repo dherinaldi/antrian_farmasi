@@ -177,13 +177,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
         integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous">
     </script>
-    
+
     <!-- DataTablesJS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Responsivevoice -->
     <!-- Get API Key -> https://responsivevoice.org/ -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <!-- <script src="../assets/js/clock.js"></script> -->
 
     <script type="text/javascript">
@@ -204,15 +204,15 @@
                     "data": "no_antrian",
                     "width": '250px',
                     "className": 'text-center'
-                },              
+                },
                 {
-                    "data": "norm",                    
+                    "data": "norm",
                     "className": 'text-left'
-                },   
+                },
                 {
-                    "data": "ruangan",                    
+                    "data": "ruangan",
                     "className": 'text-center'
-                },            
+                },
                 {
                     "data": "racikan",
                     "width": '250px',
@@ -272,24 +272,31 @@
 
             // mainkan suara nomor antrian
             setTimeout(function() {
-              responsiveVoice.speak("Nomor Antrian, " + data["no_antrian"] + ", menuju, loket penyerahan obat , farmasi", "Indonesian Male", {
-                rate: 0.9,
-                pitch: 1,
-                volume: 1
-              });
+                /**   responsiveVoice.speak("Nomor Antrian, " + data["no_antrian"] + ", menuju, loket penyerahan obat , farmasi", "Indonesian Male", {
+                    rate: 0.9,
+                    pitch: 1,
+                    volume: 1
+                  });*/
+                const u = new SpeechSynthesisUtterance("Nomor Antrian " + data["no_antrian"] );
+                u.lang = "id-ID";
+                u.rate = 0.9;
+                speechSynthesis.speak(u);
+                
             }, durasi_bell);
 
             // proses update data
             $.ajax({
-              type: "POST",               // mengirim data dengan method POST
-              url: "update.php",          // url file proses update data
-              data: { id: id }            // tentukan data yang dikirim
+                type: "POST", // mengirim data dengan method POST
+                url: "update.php", // url file proses update data
+                data: {
+                    id: id
+                } // tentukan data yang dikirim
             });
         });
 
         $('#tabel-antrian tbody').on('click', 'button.cetak', function() {
             var data = table.row($(this).parents('tr')).data();
-          
+
             $.ajax({
                 type: 'POST', // mengirim data dengan method POST
                 url: '../nomor-antrian/cetak.php', // url file proses insert data
@@ -312,13 +319,13 @@
         });
 
         // auto reload data antrian setiap 20 detik untuk menampilkan data secara realtime
-          setInterval(function() {
-          $('#jumlah-antrian').load('get_jumlah_antrian.php').fadeIn("slow");
-          $('#antrian-sekarang').load('get_antrian_sekarang.php').fadeIn("slow");
-          $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
-          $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
-          table.ajax.reload(null, false);
-        }, 10000);  
+        setInterval(function() {
+            $('#jumlah-antrian').load('get_jumlah_antrian.php').fadeIn("slow");
+            $('#antrian-sekarang').load('get_antrian_sekarang.php').fadeIn("slow");
+            $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
+            $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
+            table.ajax.reload(null, false);
+        }, 10000);
     });
     </script>
 </body>
