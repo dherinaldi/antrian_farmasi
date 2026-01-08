@@ -89,7 +89,8 @@
                                         <h1 id="antrian-sekarang"
                                             class="display-1 fw-bold text-success text-center lh-1 pb-2"></h1>
                                         <!-- <button id="test-voice" class="btn btn-primary">Aktifkan Suara</button> -->
-                                        <button id="aktifkan-suara" class="btn btn-sm btn-primary">Aktifkan Suara</button>
+                                        <button id="aktifkan-suara" class="btn btn-sm btn-primary">Aktifkan
+                                            Suara</button>
                                         <!-- <p id="antrian-sekarang" class="fs-3 text-success mb-1"></p> -->
 
                                     </div>
@@ -133,19 +134,62 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
     <!-- Responsivevoice -->
     <!-- Get API Key -> https://responsivevoice.org/ -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zcdq"></script>
+    <script src="../assets/js/responsivevoice.js"></script>
     <script src="../assets/js/clock.js"></script>
 
     <script type="text/javascript">
     let suaraDiaktifkan = false;
     let nomorTerakhir = null;
 
+    let selectedVoice = null;
+
+    function initVoice() {
+        const voices = speechSynthesis.getVoices();
+
+        if (voices.length === 0) {
+            // kadang getVoices() masih kosong, tunggu event
+            speechSynthesis.onvoiceschanged = initVoice;
+            return;
+        }
+
+        // filter hanya bahasa Indonesia
+        const indoVoices = voices.filter(v => v.lang === "id-ID");
+
+        // cari suara pria berdasarkan nama
+        selectedVoice =
+            indoVoices.find(v => /male|laki|man/i.test(v.name)) ||
+            indoVoices[0] || // fallback ke suara Indonesia pertama
+            voices.find(v => /male|david|matthew|daniel/i.test(v.name)) || // fallback ke male English
+            voices[0]; // terakhir: apapun yang ada
+
+        console.log("🎙️ Suara dipilih:", selectedVoice?.name || "default");
+    }
+
+    initVoice(); // panggil saat halaman pertama dimuat
+
+    function speakNomor1(nomor) {
+        const u = new SpeechSynthesisUtterance(
+            "Nomor antrian " + nomor + ", silakan menuju loket penyerahan obat, farmasi"
+        );
+        u.lang = "id-ID";
+        u.rate = 0.9;
+
+        if (selectedVoice) u.voice = selectedVoice;
+
+        speechSynthesis.speak(u, "Indonesian Female");
+    }
+
+    function speakNomor(nomor) {
+        responsiveVoice.speak("Nomor antrian " + nomor + ",, silakan menuju loket penyerahan obat, farmasi", "Indonesian Male");
+    }    
+
+    //mulai disini
     $('#aktifkan-suara').on('click', function() {
         suaraDiaktifkan = true;
         alert("✅ Suara aktif — sistem siap memanggil antrian.");
         $(this).hide(); // sembunyikan tombol
         cekAntrian();
-        setInterval(cekAntrian, 10000); // cek tiap 10 detik
+        setInterval(cekAntrian, 5000); // cek tiap 10 detik
     });
 
     function cekAntrian() {
@@ -155,16 +199,22 @@
                 const nomor = response.trim();
                 if (nomor && nomor !== nomorTerakhir) { // hanya bicara jika nomor baru
                     nomorTerakhir = nomor;
-                    const u = new SpeechSynthesisUtterance("Nomor antrian " + nomor +
+
+                    /* const u = new SpeechSynthesisUtterance("Nomor antrian " + nomor +
                         ", silakan menuju loket penyerahan obat, farmasi");
-                    u.lang = "id-ID";
+                    u.lang = "id-ID male";
                     u.rate = 0.9;
-                    speechSynthesis.speak(u);
+                    speechSynthesis.speak(u); */
+
+                    speakNomor(nomor);
+
                     console.log("Memanggil antrian:", nomor);
                 }
             }
         });
     }
+
+
 
     $('#aktifkan-suara1').on('click', function() {
         suaraDiaktifkan = true;
@@ -228,67 +278,14 @@
             });
         });
 
-
-
-
-
-
-        //$('#antrian-selanjutnya').load('get_antrian_selanjutnya.php');
-        //$('#sisa-antrian').load('get_sisa_antrian.php');
-
-
-        // panggilan antrian dan update data
-        $('#tabel-antrian tbody').on('click', 'button', function() {
-            // ambil data dari datatables
-            var data = table.row($(this).parents('tr')).data();
-            // buat variabel untuk menampilkan data "id"
-            var id = data["id"];
-            // buat variabel untuk menampilkan audio bell antrian
-            var bell = document.getElementById('tingtung');
-
-            // mainkan suara bell antrian
-            bell.pause();
-            bell.currentTime = 0;
-            bell.play();
-
-            // set delay antara suara bell dengan suara nomor antrian
-            durasi_bell = bell.duration * 770;
-
-            // mainkan suara nomor antrian
-            setTimeout(function() {
-                /* responsiveVoice.speak("Nomor Antrian, " + data["no_antrian"] +
-                    ", menuju, loket, farmasi", "Indonesian Male", {
-                        rate: 0.9,
-                        pitch: 1,
-                        volume: 1
-                    }); */
-
-                const u = new SpeechSynthesisUtterance("Nomor Antrian " + data[
-                    "no_antrian"]);
-                u.lang = "id-ID";
-                u.rate = 0.9;
-                speechSynthesis.speak(u);
-
-
-            }, durasi_bell);
-
-            // proses update data
-            $.ajax({
-                type: "POST", // mengirim data dengan method POST
-                url: "update.php", // url file proses update data
-                data: {
-                    id: id
-                } // tentukan data yang dikirim
-            });
-        });
-
         // auto reload data antrian setiap 1 detik untuk menampilkan data secara realtime
-        setInterval(function() {
+        /* setInterval(function() {
             $('#jumlah-antrian').load('get_jumlah_antrian.php').fadeIn("slow");
             $('#antrian-sekarang').load('get_antrian_sekarang.php').fadeIn("slow");
             $('#antrian-selanjutnya').load('get_antrian_selanjutnya.php').fadeIn("slow");
             $('#sisa-antrian').load('get_sisa_antrian.php').fadeIn("slow");
-        }, 1000);
+        }, 1000); */
+        
     });
     </script>
 </body>
